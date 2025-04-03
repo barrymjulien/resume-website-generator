@@ -1,0 +1,32 @@
+{
+  "name": "resume-website-generator",
+  "version": "1.0.0",
+  "description": "Form-based resume website generator that automatically creates static GitHub Pages",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve form",
+    "dev:form": "serve form",
+    "dev:function": "netlify-lambda serve functions",
+    "build": "npm run build:function && npm run build:pages",
+    "build:function": "netlify-lambda build functions",
+    "build:pages": "node _scripts/generate-pages.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "resume",
+    "generator",
+    "static-site",
+    "github-pages"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^19.0.7",
+    "marked": "^4.3.0",
+    "nunjucks": "^3.2.4"
+  },
+  "devDependencies": {
+    "netlify-lambda": "^2.0.16",
+    "serve": "^14.2.0"
+  }
+}

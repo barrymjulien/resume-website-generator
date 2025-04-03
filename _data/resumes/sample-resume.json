@@ -1,0 +1,112 @@
+{
+  "fullName": "Jane Doe",
+  "email": "jane.doe@example.com",
+  "phone": "555-123-4567",
+  "location": "San Francisco, CA",
+  "summary": "Experienced software engineer with a passion for creating elegant, efficient solutions to complex problems. Skilled in full-stack development, cloud architecture, and leading technical teams.",
+  "website": "https://janedoe.example.com",
+  "linkedin": "https://linkedin.com/in/janedoe",
+  "github": "https://github.com/janedoe",
+  "education": [
+    {
+      "institution": "Stanford University",
+      "degree": "Master of Science in Computer Science",
+      "startDate": "2015-09",
+      "endDate": "2017-06",
+      "description": "Specialized in Artificial Intelligence and Machine Learning. Thesis on 'Neural Networks for Natural Language Processing'."
+    },
+    {
+      "institution": "University of California, Berkeley",
+      "degree": "Bachelor of Science in Computer Science",
+      "startDate": "2011-09",
+      "endDate": "2015-05",
+      "description": "Graduated with honors. Minor in Mathematics."
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tech Innovations Inc.",
+      "position": "Senior Software Engineer",
+      "startDate": "2020-03",
+      "endDate": null,
+      "current": true,
+      "description": "- Lead a team of 5 engineers developing a cloud-based analytics platform\n- Architected and implemented microservices using Node.js and Docker\n- Reduced system latency by 40% through performance optimizations\n- Implemented CI/CD pipeline using GitHub Actions and AWS"
+    },
+    {
+      "company": "DataSphere Solutions",
+      "position": "Software Engineer",
+      "startDate": "2017-07",
+      "endDate": "2020-02",
+      "current": false,
+      "description": "- Developed RESTful APIs using Python and Django\n- Created responsive web interfaces with React and TypeScript\n- Implemented data processing pipelines using Apache Spark\n- Collaborated with data scientists to deploy machine learning models"
+    },
+    {
+      "company": "StartUp Ventures",
+      "position": "Software Engineering Intern",
+      "startDate": "2016-05",
+      "endDate": "2016-08",
+      "current": false,
+      "description": "- Assisted in developing a mobile application using React Native\n- Implemented user authentication and authorization features\n- Created automated tests using Jest and Enzyme"
+    }
+  ],
+  "skills": [
+    "JavaScript",
+    "TypeScript",
+    "Python",
+    "React",
+    "Node.js",
+    "AWS",
+    "Docker",
+    "Kubernetes",
+    "GraphQL",
+    "MongoDB",
+    "PostgreSQL",
+    "CI/CD",
+    "Git",
+    "Agile Methodologies"
+  ],
+  "projects": [
+    {
+      "title": "Personal Finance Dashboard",
+      "url": "https://github.com/janedoe/finance-dashboard",
+      "description": "A web application for tracking personal finances, with features for budget planning, expense tracking, and financial goal setting.",
+      "technologies": [
+        "React",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "Chart.js"
+      ]
+    },
+    {
+      "title": "Natural Language Processing Toolkit",
+      "url": "https://github.com/janedoe/nlp-toolkit",
+      "description": "A Python library for natural language processing tasks, including sentiment analysis, named entity recognition, and text summarization.",
+      "technologies": [
+        "Python",
+        "TensorFlow",
+        "NLTK",
+        "spaCy"
+      ]
+    },
+    {
+      "title": "E-commerce Platform",
+      "url": "https://github.com/janedoe/ecommerce-platform",
+      "description": "A full-featured e-commerce platform with product catalog, shopping cart, payment processing, and order management.",
+      "technologies": [
+        "React",
+        "Redux",
+        "Node.js",
+        "Express",
+        "PostgreSQL",
+        "Stripe API"
+      ]
+    }
+  ],
+  "template": "modern",
+  "metadata": {
+    "id": "sample-resume",
+    "createdAt": "2025-04-01T12:00:00Z",
+    "version": "1.0.0"
+  }
+}

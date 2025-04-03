@@ -1,0 +1,35 @@
+[build]
+  base = "."
+  publish = "form"
+  functions = "lambda"
+  command = "npm run build:function"
+
+[dev]
+  publish = "form"
+  functions = "lambda"
+  port = 8888
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/resumes/*"
+  to = "https://[GITHUB_OWNER].github.io/[GITHUB_REPO]/resumes/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/edit/*"
+  to = "https://[GITHUB_OWNER].github.io/[GITHUB_REPO]/edit/:splat"
+  status = 301
+  force = true
+
+[template.environment]
+  GITHUB_OWNER = "Your GitHub username"
+  GITHUB_REPO = "Your GitHub repository name"
+  GITHUB_TOKEN = "Your GitHub personal access token"

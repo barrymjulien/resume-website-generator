@@ -1,0 +1,45 @@
+name: Build and Deploy Resumes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '_data/resumes/**'
+      - '_templates/**'
+      - '_scripts/**'
+  repository_dispatch:
+    types: [resume-updated]
+  schedule:
+    # Run once a day at midnight UTC
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Create data directory if it doesn't exist
+        run: mkdir -p _data/resumes
+      
+      - name: Build static pages
+        run: node _scripts/generate-pages.js
+      
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: _site
+          branch: gh-pages
+          clean: true

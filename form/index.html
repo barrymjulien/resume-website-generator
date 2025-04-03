@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Website Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-file-alt"></i> Resume Website Generator</h1>
+            <p>Create your professional resume website in minutes</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="form-container">
+            <form id="resumeForm">
+                <div class="form-section">
+                    <h2>Personal Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" placeholder="City, State/Province, Country">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="summary">Professional Summary *</label>
+                        <textarea id="summary" name="summary" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="url" id="website" name="website" placeholder="https://yourwebsite.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkedin">LinkedIn</label>
+                            <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="github">GitHub</label>
+                        <input type="url" id="github" name="github" placeholder="https://github.com/yourusername">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>Education</h2>
+                    <div id="educationContainer">
+                        <div class="education-entry">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="institution0">Institution *</label>
+                                    <input type="text" id="institution0" name="education[0].institution" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="degree0">Degree *</label>
+                                    <input type="text" id="degree0" name="education[0].degree" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="eduStartDate0">Start Date</label>
+                                    <input type="month" id="eduStartDate0" name="education[0].startDate">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="eduEndDate0">End Date</label>
+                                    <input type="month" id="eduEndDate0" name="education[0].endDate">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="eduDescription0">Description</label>
+                                <textarea id="eduDescription0" name="education[0].description" rows="3"></textarea>
+                            </div>
+                            
+                            <button type="button" class="remove-btn" style="display: none;">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addEducation" class="add-btn">+ Add Education</button>
+                </div>
+                
+                <div class="form-section">
+                    <h2>Work Experience</h2>
+                    <div id="experienceContainer">
+                        <div class="experience-entry">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="company0">Company *</label>
+                                    <input type="text" id="company0" name="experience[0].company" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="position0">Position *</label>
+                                    <input type="text" id="position0" name="experience[0].position" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expStartDate0">Start Date</label>
+                                    <input type="month" id="expStartDate0" name="experience[0].startDate">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="expEndDate0">End Date</label>
+                                    <input type="month" id="expEndDate0" name="experience[0].endDate">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="currentJob0" name="experience[0].current">
+                                        <label for="currentJob0" class="checkbox-label">Current Position</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="expDescription0">Description *</label>
+                                <textarea id="expDescription0" name="experience[0].description" rows="4" required></textarea>
+                            </div>
+                            
+                            <button type="button" class="remove-btn" style="display: none;">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addExperience" class="add-btn">+ Add Experience</button>
+                </div>
+                
+                <div class="form-section">
+                    <h2>Skills</h2>
+                    <div class="form-group">
+                        <label for="skills">Skills (comma separated) *</label>
+                        <textarea id="skills" name="skills" rows="3" required placeholder="JavaScript, HTML, CSS, React, Node.js"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>Projects</h2>
+                    <div id="projectsContainer">
+                        <div class="project-entry">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="projectTitle0">Project Title *</label>
+                                    <input type="text" id="projectTitle0" name="projects[0].title" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="projectUrl0">Project URL</label>
+                                    <input type="url" id="projectUrl0" name="projects[0].url" placeholder="https://project-demo.com">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="projectDescription0">Description *</label>
+                                <textarea id="projectDescription0" name="projects[0].description" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="projectTechnologies0">Technologies Used</label>
+                                <input type="text" id="projectTechnologies0" name="projects[0].technologies" placeholder="React, Node.js, MongoDB">
+                            </div>
+                            
+                            <button type="button" class="remove-btn" style="display: none;">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addProject" class="add-btn">+ Add Project</button>
+                </div>
+                
+                <div class="form-section">
+                    <h2>Template Selection</h2>
+                    <div class="template-selection">
+                        <div class="template-option">
+                            <input type="radio" id="templateDefault" name="template" value="default" checked>
+                            <label for="templateDefault">
+                                <div class="template-preview default-preview">
+                                    <div class="preview-header"></div>
+                                    <div class="preview-content">
+                                        <div class="preview-sidebar"></div>
+                                        <div class="preview-main"></div>
+                                    </div>
+                                </div>
+                                <span>Default</span>
+                            </label>
+                        </div>
+                        
+                        <div class="template-option">
+                            <input type="radio" id="templateModern" name="template" value="modern">
+                            <label for="templateModern">
+                                <div class="template-preview modern-preview">
+                                    <div class="preview-header modern"></div>
+                                    <div class="preview-content modern">
+                                        <div class="preview-main modern"></div>
+                                        <div class="preview-sidebar modern"></div>
+                                    </div>
+                                </div>
+                                <span>Modern</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" id="submitBtn" class="primary-btn">Generate Resume Website</button>
+                    <button type="button" id="previewBtn" class="secondary-btn">Preview</button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="submissionStatus" class="submission-status" style="display: none;">
+            <div class="status-content">
+                <div id="loadingIndicator" class="loading-indicator">
+                    <div class="spinner"></div>
+                    <p>Processing your resume...</p>
+                </div>
+                
+                <div id="successMessage" class="success-message" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Resume Website Created!</h3>
+                    <p>Your resume website has been successfully generated.</p>
+                    <div class="resume-links">
+                        <a href="#" id="resumeLink" target="_blank" class="primary-btn">View Your Resume</a>
+                        <a href="#" id="editLink" class="secondary-btn">Edit Your Resume</a>
+                    </div>
+                </div>
+                
+                <div id="errorMessage" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Something Went Wrong</h3>
+                    <p id="errorText">There was an error processing your resume. Please try again.</p>
+                    <button type="button" id="retryBtn" class="primary-btn">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Resume Website Generator. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
