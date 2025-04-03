@@ -390,8 +390,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = {
                 success: true,
                 resumeId: resumeData.metadata.id,
-                resumeUrl: `https://example.com/resumes/${resumeData.metadata.id}`,
-                editUrl: `https://example.com/edit/${resumeData.metadata.id}?token=abc123`
+                resumeUrl: `https://barrymjulien.github.io/resume-website-generator/resumes/${resumeData.metadata.id}.html`,
+                editUrl: `https://barrymjulien.github.io/resume-website-generator/edit/${resumeData.metadata.id}.html?token=abc123`
             };
             
             handleSubmitResponse(response);
