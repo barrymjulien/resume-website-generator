@@ -28,5 +28,3 @@
   "devDependencies": {
     "netlify-lambda": "^2.0.16",
     "serve": "^14.2.0"
-  }
-}

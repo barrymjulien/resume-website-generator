@@ -19,17 +19,17 @@
 
 [[redirects]]
   from = "/resumes/*"
-  to = "https://[GITHUB_OWNER].github.io/[GITHUB_REPO]/resumes/:splat"
+  to = "https://barrymjulien.github.io/resume-website-generator/resumes/:splat"
   status = 301
   force = true
 
 [[redirects]]
   from = "/edit/*"
-  to = "https://[GITHUB_OWNER].github.io/[GITHUB_REPO]/edit/:splat"
+  to = "https://barrymjulien.github.io/resume-website-generator/edit/:splat"
   status = 301
   force = true
 
 [template.environment]
-  GITHUB_OWNER = "Your GitHub username"
-  GITHUB_REPO = "Your GitHub repository name"
+  GITHUB_OWNER = "barrymjulien"
+  GITHUB_REPO = "resume-website-generator"
   GITHUB_TOKEN = "Your GitHub personal access token"
