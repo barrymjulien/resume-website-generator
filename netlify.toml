@@ -28,6 +28,17 @@
   to = "/index.html"
   status = 200
 
+# Handle resume creation form
+[[redirects]]
+  from = "/form"
+  to = "/form/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/form/"
+  to = "/form/index.html"
+  status = 200
+
 # Ensure resume pages work
 [[redirects]]
   from = "/resumes/*"
