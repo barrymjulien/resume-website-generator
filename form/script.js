@@ -379,32 +379,30 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {Object} resumeData - Resume data
      */
     function submitResumeData(resumeData) {
-        // For demo purposes, we'll simulate a successful API call
-        // In a real implementation, this would be a fetch call to the serverless function
-        
         console.log('Submitting resume data:', resumeData);
         
-        // Simulate API call delay
-        setTimeout(() => {
-            // Simulate successful response
-            const response = {
-                success: true,
-                resumeId: resumeData.metadata.id,
-                resumeUrl: `https://barrymjulien.github.io/resume-website-generator/resumes/${resumeData.metadata.id}.html`,
-                editUrl: `https://barrymjulien.github.io/resume-website-generator/edit/${resumeData.metadata.id}.html?token=abc123`
-            };
-            
-            handleSubmitResponse(response);
-            
-            // Uncomment to simulate an error response
-            /*
-            const errorResponse = {
+        // Show loading state
+        showSubmissionStatus();
+        
+        // Call the serverless function
+        fetch('/.netlify/functions/submit-resume', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(resumeData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            handleSubmitResponse(data);
+        })
+        .catch(error => {
+            console.error('Error submitting resume:', error);
+            handleSubmitResponse({
                 success: false,
                 error: 'Failed to connect to the server. Please try again.'
-            };
-            handleSubmitResponse(errorResponse);
-            */
-        }, 2000);
+            });
+        });
     }
     
     /**

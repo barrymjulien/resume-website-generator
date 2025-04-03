@@ -3,7 +3,7 @@ name: Build and Deploy Resumes
 on:
   push:
     branches:
-      - main
+      - master   # Changed from 'main' to 'master'
     paths:
       - '_data/resumes/**'
       - '_templates/**'
