@@ -19,12 +19,8 @@
   status = 200
   force = true
 
-# Ensure function requests work directly
-[[redirects]]
-  from = "/.netlify/functions/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-  force = true
+# Note: Removed problematic redirect as Netlify doesn't allow redirects
+# to or from paths starting with "/.netlify" - these paths are reserved
 
 # Handle form page
 [[redirects]]
