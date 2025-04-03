@@ -532,7 +532,7 @@ async function generateIndexPage(resumes) {
         <div class="container">
             <h1><i class="fas fa-file-alt"></i> Resume Website Generator</h1>
             <p>Create and share your professional resume website in minutes</p>
-            <a href="/" class="create-btn">Create Your Resume</a>
+            <a href="/form/index.html" class="create-btn">Create Your Resume</a>
         </div>
     </header>
     
