@@ -5,6 +5,7 @@
  * stores the data in a GitHub repository, and triggers a build process.
  */
 
+require('dotenv').config();
 const { Octokit } = require('@octokit/rest');
 
 // Configuration
@@ -73,15 +74,16 @@ exports.handler = async (event, context) => {
     // Trigger the build process
     await triggerBuild(sanitizedData.metadata.id);
     
-    // Return success response
+    // Return success response with production URLs (without brackets to avoid URL encoding issues)
+    const resumeId = sanitizedData.metadata.id;
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         success: true,
-        resumeId: sanitizedData.metadata.id,
-        resumeUrl: `https://${config.github.owner}.github.io/${config.github.repo}/resumes/${sanitizedData.metadata.id}`,
-        editUrl: `https://${config.github.owner}.github.io/${config.github.repo}/edit/${sanitizedData.metadata.id}?token=${generateEditToken(sanitizedData.metadata.id)}`
+        resumeId: resumeId,
+        resumeUrl: `/resumes/${resumeId}.html`,
+        editUrl: `/edit/${resumeId}.html?token=${generateEditToken(resumeId)}`
       })
     };
   } catch (error) {
@@ -275,50 +277,77 @@ function generateEditToken(resumeId) {
  * @returns {Object} - Result of the GitHub operation
  */
 async function storeResumeInGitHub(data) {
-  // Initialize Octokit with the GitHub token
-  const octokit = new Octokit({
-    auth: config.github.token
-  });
-  
-  // Path to the resume JSON file in the repository
-  const filePath = `${config.github.dataPath}/${data.metadata.id}.json`;
-  
-  // Convert the data to a JSON string
-  const content = JSON.stringify(data, null, 2);
+  console.log('Storing resume data:', data.metadata.id);
   
   try {
-    // Check if the file already exists
-    let sha;
-    try {
-      const { data: fileData } = await octokit.repos.getContent({
-        owner: config.github.owner,
-        repo: config.github.repo,
-        path: filePath,
-        ref: config.github.branch
-      });
-      sha = fileData.sha;
-    } catch (error) {
-      // File doesn't exist, which is fine for a new resume
-      sha = null;
-    }
-    
-    // Create or update the file
-    const result = await octokit.repos.createOrUpdateFileContents({
-      owner: config.github.owner,
-      repo: config.github.repo,
-      path: filePath,
-      message: sha 
-        ? `Update resume ${data.metadata.id}` 
-        : `Add new resume ${data.metadata.id}`,
-      content: Buffer.from(content).toString('base64'),
-      branch: config.github.branch,
-      sha: sha
+    const octokit = new Octokit({
+      auth: config.github.token
     });
     
-    return result.data;
+    // Get the current commit SHA
+    const { data: refData } = await octokit.git.getRef({
+      owner: config.github.owner,
+      repo: config.github.repo,
+      ref: `heads/${config.github.branch}`
+    });
+    
+    const commitSha = refData.object.sha;
+    
+    // Create a new blob with the resume data
+    const { data: blobData } = await octokit.git.createBlob({
+      owner: config.github.owner,
+      repo: config.github.repo,
+      content: Buffer.from(JSON.stringify(data, null, 2)).toString('base64'),
+      encoding: 'base64'
+    });
+    
+    // Get the current tree
+    const { data: treeData } = await octokit.git.getTree({
+      owner: config.github.owner,
+      repo: config.github.repo,
+      tree_sha: commitSha
+    });
+    
+    // Create a new tree with the new file
+    const { data: newTree } = await octokit.git.createTree({
+      owner: config.github.owner,
+      repo: config.github.repo,
+      base_tree: treeData.sha,
+      tree: [
+        {
+          path: `${config.github.dataPath}/${data.metadata.id}.json`,
+          mode: '100644',
+          type: 'blob',
+          sha: blobData.sha
+        }
+      ]
+    });
+    
+    // Create a new commit
+    const { data: commitData } = await octokit.git.createCommit({
+      owner: config.github.owner,
+      repo: config.github.repo,
+      message: `Add resume: ${data.metadata.id}`,
+      tree: newTree.sha,
+      parents: [commitSha]
+    });
+    
+    // Update the reference
+    await octokit.git.updateRef({
+      owner: config.github.owner,
+      repo: config.github.repo,
+      ref: `heads/${config.github.branch}`,
+      sha: commitData.sha
+    });
+    
+    return {
+      success: true,
+      message: 'Resume data stored successfully',
+      commitSha: commitData.sha
+    };
   } catch (error) {
     console.error('Error storing resume in GitHub:', error);
-    throw new Error('Failed to store resume data in GitHub');
+    throw new Error(`Failed to store resume: ${error.message}`);
   }
 }
 
@@ -328,25 +357,33 @@ async function storeResumeInGitHub(data) {
  * @returns {Object} - Result of the trigger operation
  */
 async function triggerBuild(resumeId) {
-  // Initialize Octokit with the GitHub token
-  const octokit = new Octokit({
-    auth: config.github.token
-  });
+  console.log('Triggering build for resume:', resumeId);
   
   try {
-    // Trigger a repository dispatch event to start the build
-    const result = await octokit.repos.createDispatchEvent({
+    const octokit = new Octokit({
+      auth: config.github.token
+    });
+    
+    // Create a repository dispatch event to trigger the GitHub Actions workflow
+    const { data } = await octokit.repos.createDispatchEvent({
       owner: config.github.owner,
       repo: config.github.repo,
-      event_type: 'resume-updated',
+      event_type: 'resume-created',
       client_payload: {
         resumeId: resumeId
       }
     });
     
-    return result.data;
+    return {
+      success: true,
+      message: 'Build triggered successfully'
+    };
   } catch (error) {
     console.error('Error triggering build:', error);
-    throw new Error('Failed to trigger build process');
+    // We'll continue even if the build trigger fails
+    return {
+      success: false,
+      message: `Failed to trigger build: ${error.message}`
+    };
   }
 }

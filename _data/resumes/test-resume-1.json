@@ -1,0 +1,69 @@
+{
+  "fullName": "John Smith",
+  "email": "john.smith@example.com",
+  "phone": "+1 (555) 123-4567",
+  "location": "New York, NY",
+  "summary": "Experienced software engineer with 8 years of experience in full-stack development. Specialized in React, Node.js, and cloud infrastructure.",
+  "website": "https://johnsmith.example.com",
+  "linkedin": "https://linkedin.com/in/johnsmith",
+  "github": "https://github.com/johnsmith",
+  "skills": [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Node.js",
+    "AWS",
+    "Docker",
+    "Kubernetes",
+    "CI/CD",
+    "GraphQL",
+    "MongoDB"
+  ],
+  "education": [
+    {
+      "institution": "Massachusetts Institute of Technology",
+      "degree": "Bachelor of Science in Computer Science",
+      "startDate": "2012-09",
+      "endDate": "2016-05",
+      "description": "Graduated with honors. Relevant coursework included algorithms, data structures, artificial intelligence, and systems programming."
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tech Innovations Inc.",
+      "position": "Senior Software Engineer",
+      "startDate": "2020-03",
+      "endDate": null,
+      "current": true,
+      "description": "- Lead developer on cloud migration project reducing infrastructure costs by 35%\n- Implemented microservices architecture using Node.js and Docker\n- Mentored junior developers and conducted code reviews\n- Optimized CI/CD pipeline reducing deployment time by 60%"
+    },
+    {
+      "company": "WebSolutions LLC",
+      "position": "Software Engineer",
+      "startDate": "2016-06",
+      "endDate": "2020-02",
+      "current": false,
+      "description": "- Developed responsive web applications using React and Redux\n- Designed and implemented RESTful APIs\n- Collaborated with design teams to create intuitive user interfaces\n- Participated in agile development process"
+    }
+  ],
+  "projects": [
+    {
+      "title": "Data Visualization Dashboard",
+      "url": "https://github.com/johnsmith/data-viz",
+      "description": "Interactive dashboard for visualizing complex datasets using D3.js and React",
+      "technologies": ["React", "D3.js", "CSS Grid", "Firebase"]
+    },
+    {
+      "title": "E-commerce Platform",
+      "url": "https://github.com/johnsmith/ecommerce",
+      "description": "Fully functional e-commerce platform with payment processing and inventory management",
+      "technologies": ["Node.js", "Express", "MongoDB", "Stripe API", "React"]
+    }
+  ],
+  "metadata": {
+    "createdAt": "2025-04-03T22:12:20.000Z",
+    "version": "1.0.0",
+    "id": "test-resume-1"
+  },
+  "template": "modern"
+}

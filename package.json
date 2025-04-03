@@ -8,7 +8,7 @@
     "dev:form": "serve form",
     "dev:function": "netlify-lambda serve functions",
     "build": "npm run build:function && npm run build:pages",
-    "build:function": "netlify-lambda build functions",
+    "build:function": "netlify-lambda build functions functions-build",
     "build:pages": "node _scripts/generate-pages.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,8 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^19.0.7",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
     "marked": "^4.3.0",
     "nunjucks": "^3.2.4"
   },

@@ -1,33 +1,54 @@
 [build]
   base = "."
-  publish = "form"
-  functions = "lambda"
-  command = "npm run build:function"
+  publish = "_site"
+  functions = "functions-build"
+  command = "npm run build"
 
 [dev]
   publish = "form"
-  functions = "lambda"
+  functions = "functions-build"
   port = 8888
 
 [functions]
   node_bundler = "esbuild"
 
+# Handle API requests
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+  force = true
 
+# Ensure function requests work directly
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+
+# Handle form page
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+
+# Ensure resume pages work
 [[redirects]]
   from = "/resumes/*"
-  to = "https://barrymjulien.github.io/resume-website-generator/resumes/:splat"
-  status = 301
-  force = true
+  to = "/_site/resumes/:splat"
+  status = 200
 
+# Ensure edit pages work
 [[redirects]]
   from = "/edit/*"
-  to = "https://barrymjulien.github.io/resume-website-generator/edit/:splat"
-  status = 301
-  force = true
+  to = "/_site/edit/:splat"
+  status = 200
+
+# Catch-all: Redirect all other requests to index.html (SPA fallback)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [template.environment]
   GITHUB_OWNER = "barrymjulien"

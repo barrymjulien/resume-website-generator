@@ -280,7 +280,7 @@
         <div class="main-content">
             <div class="summary section">
                 <h2 class="section-title">Professional Summary</h2>
-                <p>{{ summary }}</p>
+                <p>{{ summary | safe }}</p>
             </div>
             
             <div class="experience section">
@@ -302,7 +302,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="item-description">{{ exp.description }}</div>
+                    <div class="item-description">{{ exp.description | safe }}</div>
                 </div>
                 {% endfor %}
             </div>
@@ -327,7 +327,7 @@
                         </div>
                     </div>
                     {% if edu.description %}
-                    <div class="item-description">{{ edu.description }}</div>
+                    <div class="item-description">{{ edu.description | safe }}</div>
                     {% endif %}
                 </div>
                 {% endfor %}
@@ -342,7 +342,7 @@
                     <div class="item-header">
                         <div class="item-title">{{ project.title }}</div>
                     </div>
-                    <div class="item-description">{{ project.description }}</div>
+                    <div class="item-description">{{ project.description | safe }}</div>
                     
                     {% if project.url %}
                     <div class="project-links">

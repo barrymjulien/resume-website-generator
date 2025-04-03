@@ -1,0 +1,44 @@
+{
+  "fullName": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "",
+  "location": "San Francisco, CA, USA",
+  "summary": "Experienced software engineer with a strong background in web development and a passion for creating efficient, scalable applications. Skilled in JavaScript, React, Node.js, and modern web technologies. Proven track record of delivering high-quality code and collaborating effectively in cross-functional teams.",
+  "website": "",
+  "linkedin": "",
+  "github": "",
+  "education": [
+    {
+      "institution": "Stanford University",
+      "degree": "Bachelor of Science in Computer Science",
+      "startDate": "",
+      "endDate": "",
+      "description": ""
+    }
+  ],
+  "experience": [
+    {
+      "company": "Google",
+      "position": "Senior Software Engineer",
+      "startDate": "",
+      "endDate": "",
+      "current": false,
+      "description": "Led a team of engineers in developing and maintaining large-scale web applications. Implemented CI/CD pipelines and improved application performance by 30%. Collaborated with product managers and designers to deliver high-quality features."
+    }
+  ],
+  "projects": [
+    {
+      "title": "Personal Portfolio Website",
+      "url": "https://project-demo.com",
+      "description": "Designed and developed a responsive personal portfolio website to showcase my projects and skills. Implemented smooth animations and a contact form with validation.",
+      "technologies": ["HTML", "CSS", "JavaScript", "React"]
+    }
+  ],
+  "skills": ["JavaScript", "HTML", "CSS", "React", "Node.js", "TypeScript", "Git", "RESTful APIs", "GraphQL", "MongoDB", "Express"],
+  "template": "default",
+  "metadata": {
+    "createdAt": "2025-04-03T17:27:14.000Z",
+    "version": "1.0.0",
+    "id": "m91mp8ivw0o4e"
+  }
+}

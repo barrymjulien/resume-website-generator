@@ -3,13 +3,13 @@ name: Build and Deploy Resumes
 on:
   push:
     branches:
-      - master   # Changed from 'main' to 'master'
+      - main
     paths:
       - '_data/resumes/**'
       - '_templates/**'
       - '_scripts/**'
   repository_dispatch:
-    types: [resume-updated]
+    types: [resume-created, resume-updated]
   schedule:
     # Run once a day at midnight UTC
     - cron: '0 0 * * *'

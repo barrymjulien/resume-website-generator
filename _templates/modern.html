@@ -344,7 +344,7 @@
                     {% if experience.length > 0 %}
                     <h2 class="title">{{ experience[0].position }}</h2>
                     {% endif %}
-                    <div class="summary">{{ summary }}</div>
+                    <div class="summary">{{ summary | safe }}</div>
                 </div>
                 
                 <div class="header-side">
@@ -414,7 +414,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="item-description">{{ exp.description }}</div>
+                        <div class="item-description">{{ exp.description | safe }}</div>
                     </div>
                     {% endfor %}
                 </section>
@@ -439,7 +439,7 @@
                             </div>
                         </div>
                         {% if edu.description %}
-                        <div class="item-description">{{ edu.description }}</div>
+                        <div class="item-description">{{ edu.description | safe }}</div>
                         {% endif %}
                     </div>
                     {% endfor %}
@@ -463,7 +463,7 @@
                     {% for project in projects %}
                     <div class="project-item">
                         <h4 class="project-title">{{ project.title }}</h4>
-                        <p class="project-description">{{ project.description }}</p>
+                        <p class="project-description">{{ project.description | safe }}</p>
                         
                         {% if project.url %}
                         <a href="{{ project.url }}" target="_blank" class="project-link">
