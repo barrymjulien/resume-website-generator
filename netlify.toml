@@ -9,6 +9,11 @@
   functions = "functions-build"
   port = 8888
 
+# Include form files in the build
+[[build.processing.copy]]
+  from = "form/*"
+  to = "form/"
+
 [functions]
   node_bundler = "esbuild"
 
