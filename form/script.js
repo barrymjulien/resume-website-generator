@@ -1,392 +1,320 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Form elements
-    const resumeForm = document.getElementById('resumeForm');
+    // Form elements (Using IDs you provided)
+    const resumeForm = document.getElementById('resumeForm'); // Assuming form ID is resumeForm
     const educationContainer = document.getElementById('educationContainer');
     const experienceContainer = document.getElementById('experienceContainer');
     const projectsContainer = document.getElementById('projectsContainer');
-    
-    // Buttons
+
+    // Buttons (Using IDs you provided)
     const addEducationBtn = document.getElementById('addEducation');
     const addExperienceBtn = document.getElementById('addExperience');
     const addProjectBtn = document.getElementById('addProject');
-    const submitBtn = document.getElementById('submitBtn');
+    const submitBtn = document.getElementById('submitBtn'); // Assuming submit button ID
     const previewBtn = document.getElementById('previewBtn');
-    const retryBtn = document.getElementById('retryBtn');
-    
-    // Status elements
-    const submissionStatus = document.getElementById('submissionStatus');
+    const retryBtn = document.getElementById('retryBtn'); // Assuming retry button ID for error message
+
+    // Status elements (Using IDs you provided)
+    const submissionStatus = document.getElementById('submissionStatus'); // Main container for status
     const loadingIndicator = document.getElementById('loadingIndicator');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
-    const errorText = document.getElementById('errorText');
+    const errorText = document.getElementById('errorText'); // Specific element for error message text
     const resumeLink = document.getElementById('resumeLink');
     const editLink = document.getElementById('editLink');
-    
+
     // Counter for dynamic form elements
-    let educationCount = 1;
-    let experienceCount = 1;
-    let projectCount = 1;
-    
-    // Add event listeners
-    addEducationBtn.addEventListener('click', addEducation);
-    addExperienceBtn.addEventListener('click', addExperience);
-    addProjectBtn.addEventListener('click', addProject);
-    resumeForm.addEventListener('submit', handleSubmit);
-    previewBtn.addEventListener('click', handlePreview);
-    retryBtn.addEventListener('click', hideSubmissionStatus);
-    
-    // Initialize remove buttons for initial entries
+    // Initialize based on existing elements if needed, or start fresh
+    let educationCount = document.querySelectorAll('.education-entry').length;
+    let experienceCount = document.querySelectorAll('.experience-entry').length;
+    let projectCount = document.querySelectorAll('.project-entry').length;
+
+    // --- Event Listeners ---
+    if (addEducationBtn) addEducationBtn.addEventListener('click', addEducation);
+    if (addExperienceBtn) addExperienceBtn.addEventListener('click', addExperience);
+    if (addProjectBtn) addProjectBtn.addEventListener('click', addProject);
+    if (resumeForm) resumeForm.addEventListener('submit', handleSubmit);
+    if (previewBtn) previewBtn.addEventListener('click', handlePreview);
+    // Make retry button hide the overall status display
+    if (retryBtn) retryBtn.addEventListener('click', hideSubmissionStatus);
+
+    // Initialize remove buttons for potentially pre-existing entries
     initializeRemoveButtons();
-    
-    /**
-     * Initialize remove buttons for the initial form entries
-     */
+
+    // --- Functions ---
+
     function initializeRemoveButtons() {
-        document.querySelectorAll('.education-entry .remove-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (document.querySelectorAll('.education-entry').length > 1) {
-                    this.closest('.education-entry').remove();
-                    updateRemoveButtonsVisibility('.education-entry');
-                }
-            });
-        });
-        
-        document.querySelectorAll('.experience-entry .remove-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (document.querySelectorAll('.experience-entry').length > 1) {
-                    this.closest('.experience-entry').remove();
-                    updateRemoveButtonsVisibility('.experience-entry');
-                }
-            });
-        });
-        
-        document.querySelectorAll('.project-entry .remove-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (document.querySelectorAll('.project-entry').length > 1) {
-                    this.closest('.project-entry').remove();
-                    updateRemoveButtonsVisibility('.project-entry');
-                }
-            });
-        });
-        
-        // Update visibility of remove buttons
+        document.querySelectorAll('.education-entry .remove-btn').forEach(btn => addRemoveListener(btn, '.education-entry'));
+        document.querySelectorAll('.experience-entry .remove-btn').forEach(btn => addRemoveListener(btn, '.experience-entry'));
+        document.querySelectorAll('.project-entry .remove-btn').forEach(btn => addRemoveListener(btn, '.project-entry'));
+
         updateRemoveButtonsVisibility('.education-entry');
         updateRemoveButtonsVisibility('.experience-entry');
         updateRemoveButtonsVisibility('.project-entry');
     }
-    
-    /**
-     * Update the visibility of remove buttons based on the number of entries
-     * @param {string} selector - CSS selector for the entry container
-     */
+
+    function addRemoveListener(button, entrySelector) {
+         // Use { once: true } if elements are completely replaced, otherwise standard listener
+         button.addEventListener('click', function() {
+            // Only remove if more than one entry exists
+            if (document.querySelectorAll(entrySelector).length > 1) {
+                this.closest(entrySelector)?.remove(); // Use optional chaining
+                updateRemoveButtonsVisibility(entrySelector);
+            } else {
+                alert(`At least one ${entrySelector.substring(1)} is required.`);
+            }
+        });
+    }
+
     function updateRemoveButtonsVisibility(selector) {
         const entries = document.querySelectorAll(selector);
+        const show = entries.length > 1;
         entries.forEach(entry => {
             const removeBtn = entry.querySelector('.remove-btn');
-            if (entries.length > 1) {
-                removeBtn.style.display = 'block';
-            } else {
-                removeBtn.style.display = 'none';
+            if (removeBtn) {
+                removeBtn.style.display = show ? 'inline-block' : 'none'; // Or 'block'
             }
         });
     }
-    
-    /**
-     * Add a new education entry to the form
-     */
+
     function addEducation() {
-        const educationEntry = document.createElement('div');
-        educationEntry.className = 'education-entry';
-        educationEntry.innerHTML = `
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="institution${educationCount}">Institution *</label>
-                    <input type="text" id="institution${educationCount}" name="education[${educationCount}].institution" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="degree${educationCount}">Degree *</label>
-                    <input type="text" id="degree${educationCount}" name="education[${educationCount}].degree" required>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="eduStartDate${educationCount}">Start Date</label>
-                    <input type="month" id="eduStartDate${educationCount}" name="education[${educationCount}].startDate">
-                </div>
-                
-                <div class="form-group">
-                    <label for="eduEndDate${educationCount}">End Date</label>
-                    <input type="month" id="eduEndDate${educationCount}" name="education[${educationCount}].endDate">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="eduDescription${educationCount}">Description</label>
-                <textarea id="eduDescription${educationCount}" name="education[${educationCount}].description" rows="3"></textarea>
-            </div>
-            
-            <button type="button" class="remove-btn">Remove</button>
-        `;
-        
-        educationContainer.appendChild(educationEntry);
-        
-        // Add event listener to the new remove button
-        const removeBtn = educationEntry.querySelector('.remove-btn');
-        removeBtn.addEventListener('click', function() {
-            educationEntry.remove();
-            updateRemoveButtonsVisibility('.education-entry');
-        });
-        
-        educationCount++;
-        updateRemoveButtonsVisibility('.education-entry');
-    }
-    
-    /**
-     * Add a new experience entry to the form
-     */
-    function addExperience() {
-        const experienceEntry = document.createElement('div');
-        experienceEntry.className = 'experience-entry';
-        experienceEntry.innerHTML = `
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="company${experienceCount}">Company *</label>
-                    <input type="text" id="company${experienceCount}" name="experience[${experienceCount}].company" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="position${experienceCount}">Position *</label>
-                    <input type="text" id="position${experienceCount}" name="experience[${experienceCount}].position" required>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="expStartDate${experienceCount}">Start Date</label>
-                    <input type="month" id="expStartDate${experienceCount}" name="experience[${experienceCount}].startDate">
-                </div>
-                
-                <div class="form-group">
-                    <label for="expEndDate${experienceCount}">End Date</label>
-                    <input type="month" id="expEndDate${experienceCount}" name="experience[${experienceCount}].endDate">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="currentJob${experienceCount}" name="experience[${experienceCount}].current">
-                        <label for="currentJob${experienceCount}" class="checkbox-label">Current Position</label>
+        educationCount++; // Increment counter first
+        const entryHtml = `
+            <div class="education-entry form-section-item"> {/* Added form-section-item class */}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="institution${educationCount}">Institution *</label>
+                        <input type="text" id="institution${educationCount}" name="education[${educationCount}].institution" required data-name="institution">
+                    </div>
+                    <div class="form-group">
+                        <label for="degree${educationCount}">Degree *</label>
+                        <input type="text" id="degree${educationCount}" name="education[${educationCount}].degree" required data-name="degree">
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eduStartDate${educationCount}">Start Date</label>
+                        <input type="month" id="eduStartDate${educationCount}" name="education[${educationCount}].startDate" data-name="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="eduEndDate${educationCount}">End Date</label>
+                        <input type="month" id="eduEndDate${educationCount}" name="education[${educationCount}].endDate" data-name="endDate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="eduDescription${educationCount}">Description</label>
+                    <textarea id="eduDescription${educationCount}" name="education[${educationCount}].description" rows="3" data-name="description"></textarea>
+                </div>
+                <button type="button" class="remove-btn">Remove</button>
             </div>
-            
-            <div class="form-group">
-                <label for="expDescription${experienceCount}">Description *</label>
-                <textarea id="expDescription${experienceCount}" name="experience[${experienceCount}].description" rows="4" required></textarea>
-            </div>
-            
-            <button type="button" class="remove-btn">Remove</button>
         `;
-        
-        experienceContainer.appendChild(experienceEntry);
-        
-        // Add event listener to the new remove button
-        const removeBtn = experienceEntry.querySelector('.remove-btn');
-        removeBtn.addEventListener('click', function() {
-            experienceEntry.remove();
-            updateRemoveButtonsVisibility('.experience-entry');
-        });
-        
+        educationContainer.insertAdjacentHTML('beforeend', entryHtml);
+        const newEntry = educationContainer.lastElementChild;
+        const removeBtn = newEntry.querySelector('.remove-btn');
+        if (removeBtn) addRemoveListener(removeBtn, '.education-entry');
+        updateRemoveButtonsVisibility('.education-entry');
+    }
+
+    function addExperience() {
+        experienceCount++; // Increment counter first
+        const entryHtml = `
+            <div class="experience-entry form-section-item"> {/* Added form-section-item class */}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="company${experienceCount}">Company *</label>
+                        <input type="text" id="company${experienceCount}" name="experience[${experienceCount}].company" required data-name="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="position${experienceCount}">Position *</label>
+                        <input type="text" id="position${experienceCount}" name="experience[${experienceCount}].position" required data-name="position">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expStartDate${experienceCount}">Start Date</label>
+                        <input type="month" id="expStartDate${experienceCount}" name="experience[${experienceCount}].startDate" data-name="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="expEndDate${experienceCount}">End Date</label>
+                        <input type="month" id="expEndDate${experienceCount}" name="experience[${experienceCount}].endDate" data-name="endDate">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="currentJob${experienceCount}" name="experience[${experienceCount}].current" data-name="current">
+                            <label for="currentJob${experienceCount}" class="checkbox-label">Current Position</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="expDescription${experienceCount}">Description *</label>
+                    <textarea id="expDescription${experienceCount}" name="experience[${experienceCount}].description" rows="4" required data-name="description"></textarea>
+                </div>
+                <button type="button" class="remove-btn">Remove</button>
+            </div>
+        `;
+        experienceContainer.insertAdjacentHTML('beforeend', entryHtml);
+        const newEntry = experienceContainer.lastElementChild;
+        const removeBtn = newEntry.querySelector('.remove-btn');
+        const currentJobCheckbox = newEntry.querySelector(`#currentJob${experienceCount}`);
+        const endDateInput = newEntry.querySelector(`#expEndDate${experienceCount}`);
+
+        if (removeBtn) addRemoveListener(removeBtn, '.experience-entry');
+
         // Add event listener to the current job checkbox
-        const currentJobCheckbox = experienceEntry.querySelector(`#currentJob${experienceCount}`);
-        const endDateInput = experienceEntry.querySelector(`#expEndDate${experienceCount}`);
-        
-        currentJobCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                endDateInput.value = '';
-                endDateInput.disabled = true;
-            } else {
-                endDateInput.disabled = false;
-            }
-        });
-        
-        experienceCount++;
+        if (currentJobCheckbox && endDateInput) {
+             currentJobCheckbox.addEventListener('change', function() {
+                endDateInput.disabled = this.checked;
+                if (this.checked) {
+                    endDateInput.value = ''; // Clear end date if current
+                }
+            });
+            // Initial check in case it's added checked (though unlikely)
+            endDateInput.disabled = currentJobCheckbox.checked;
+        }
         updateRemoveButtonsVisibility('.experience-entry');
     }
-    
-    /**
-     * Add a new project entry to the form
-     */
+
     function addProject() {
-        const projectEntry = document.createElement('div');
-        projectEntry.className = 'project-entry';
-        projectEntry.innerHTML = `
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="projectTitle${projectCount}">Project Title *</label>
-                    <input type="text" id="projectTitle${projectCount}" name="projects[${projectCount}].title" required>
+        projectCount++; // Increment counter first
+        const entryHtml = `
+            <div class="project-entry form-section-item"> {/* Added form-section-item class */}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectTitle${projectCount}">Project Title *</label>
+                        <input type="text" id="projectTitle${projectCount}" name="projects[${projectCount}].title" required data-name="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectUrl${projectCount}">Project URL</label>
+                        <input type="url" id="projectUrl${projectCount}" name="projects[${projectCount}].url" placeholder="https://project-demo.com" data-name="url">
+                    </div>
                 </div>
-                
                 <div class="form-group">
-                    <label for="projectUrl${projectCount}">Project URL</label>
-                    <input type="url" id="projectUrl${projectCount}" name="projects[${projectCount}].url" placeholder="https://project-demo.com">
+                    <label for="projectDescription${projectCount}">Description *</label>
+                    <textarea id="projectDescription${projectCount}" name="projects[${projectCount}].description" rows="3" required data-name="description"></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="projectTechnologies${projectCount}">Technologies Used (comma-separated)</label>
+                    <input type="text" id="projectTechnologies${projectCount}" name="projects[${projectCount}].technologies" placeholder="React, Node.js, MongoDB" data-name="technologies">
+                </div>
+                <button type="button" class="remove-btn">Remove</button>
             </div>
-            
-            <div class="form-group">
-                <label for="projectDescription${projectCount}">Description *</label>
-                <textarea id="projectDescription${projectCount}" name="projects[${projectCount}].description" rows="3" required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="projectTechnologies${projectCount}">Technologies Used</label>
-                <input type="text" id="projectTechnologies${projectCount}" name="projects[${projectCount}].technologies" placeholder="React, Node.js, MongoDB">
-            </div>
-            
-            <button type="button" class="remove-btn">Remove</button>
         `;
-        
-        projectsContainer.appendChild(projectEntry);
-        
-        // Add event listener to the new remove button
-        const removeBtn = projectEntry.querySelector('.remove-btn');
-        removeBtn.addEventListener('click', function() {
-            projectEntry.remove();
-            updateRemoveButtonsVisibility('.project-entry');
-        });
-        
-        projectCount++;
+        projectsContainer.insertAdjacentHTML('beforeend', entryHtml);
+        const newEntry = projectsContainer.lastElementChild;
+        const removeBtn = newEntry.querySelector('.remove-btn');
+        if (removeBtn) addRemoveListener(removeBtn, '.project-entry');
         updateRemoveButtonsVisibility('.project-entry');
     }
-    
-    /**
-     * Handle form submission
-     * @param {Event} event - Form submission event
-     */
+
     function handleSubmit(event) {
         event.preventDefault();
-        
+
         if (!resumeForm.checkValidity()) {
-            // Trigger browser's built-in validation
-            resumeForm.reportValidity();
+            resumeForm.reportValidity(); // Trigger browser validation UI
             return;
         }
-        
-        // Show loading state
-        showSubmissionStatus();
-        
-        // Get form data
+
+        showSubmissionStatus(true); // Show loading state
+
         const formData = new FormData(resumeForm);
-        const resumeData = formDataToJSON(formData);
-        
-        // Add metadata
+        const resumeData = formDataToStructuredJSON(formData); // Use the structured JSON converter
+
+        // Add metadata just before submission
         resumeData.metadata = {
             createdAt: new Date().toISOString(),
-            version: '1.0.0',
-            id: generateUniqueId()
+            version: '1.0.0', // Or fetch from package.json if needed
+            id: generateUniqueId() // Generate ID at submission time
         };
-        
-        // Process skills (convert comma-separated string to array)
-        if (resumeData.skills) {
-            resumeData.skills = resumeData.skills
-                .split(',')
-                .map(skill => skill.trim())
-                .filter(skill => skill.length > 0);
-        }
-        
+
         // Send data to serverless function
         submitResumeData(resumeData);
     }
-    
-    /**
-     * Convert FormData to JSON object
-     * @param {FormData} formData - Form data
-     * @returns {Object} - JSON object
-     */
-    function formDataToJSON(formData) {
+
+     // More robust function to convert form data, handling dynamic sections
+    function formDataToStructuredJSON(formData) {
         const data = {};
-        
-        // Process education entries
-        data.education = [];
-        for (let i = 0; i < educationCount; i++) {
-            const institution = formData.get(`education[${i}].institution`);
-            if (institution) {
-                data.education.push({
-                    institution: institution,
-                    degree: formData.get(`education[${i}].degree`),
-                    startDate: formData.get(`education[${i}].startDate`) || null,
-                    endDate: formData.get(`education[${i}].endDate`) || null,
-                    description: formData.get(`education[${i}].description`) || ''
-                });
-            }
-        }
-        
-        // Process experience entries
-        data.experience = [];
-        for (let i = 0; i < experienceCount; i++) {
-            const company = formData.get(`experience[${i}].company`);
-            if (company) {
-                const current = formData.get(`experience[${i}].current`) === 'on';
-                data.experience.push({
-                    company: company,
-                    position: formData.get(`experience[${i}].position`),
-                    startDate: formData.get(`experience[${i}].startDate`) || null,
-                    endDate: current ? null : (formData.get(`experience[${i}].endDate`) || null),
-                    current: current,
-                    description: formData.get(`experience[${i}].description`) || ''
-                });
-            }
-        }
-        
-        // Process project entries
-        data.projects = [];
-        for (let i = 0; i < projectCount; i++) {
-            const title = formData.get(`projects[${i}].title`);
-            if (title) {
-                const technologies = formData.get(`projects[${i}].technologies`);
-                data.projects.push({
-                    title: title,
-                    url: formData.get(`projects[${i}].url`) || null,
-                    description: formData.get(`projects[${i}].description`) || '',
-                    technologies: technologies ? technologies.split(',').map(tech => tech.trim()) : []
-                });
-            }
-        }
-        
-        // Process personal information
-        data.fullName = formData.get('fullName');
-        data.email = formData.get('email');
-        data.phone = formData.get('phone') || null;
-        data.location = formData.get('location') || null;
-        data.summary = formData.get('summary');
-        data.website = formData.get('website') || null;
-        data.linkedin = formData.get('linkedin') || null;
-        data.github = formData.get('github') || null;
-        data.skills = formData.get('skills');
-        data.template = formData.get('template');
-        
+
+        // Get simple fields directly
+        ['template', 'fullName', 'email', 'phone', 'location', 'website', 'linkedin', 'github', 'summary', 'skills'].forEach(key => {
+            data[key] = formData.get(key) || ''; // Default to empty string if null
+        });
+
+        // Process Skills string into array
+         data.skills = data.skills.split(',')
+                            .map(skill => skill.trim())
+                            .filter(skill => skill.length > 0);
+
+        // Process dynamic sections
+        data.education = processDynamicSection('.education-entry', ['institution', 'degree', 'startDate', 'endDate', 'description']);
+        data.experience = processDynamicSection('.experience-entry', ['company', 'position', 'startDate', 'endDate', 'current', 'description']);
+        data.projects = processDynamicSection('.project-entry', ['title', 'url', 'description', 'technologies']);
+
         return data;
     }
-    
-    /**
-     * Generate a unique ID for the resume
-     * @returns {string} - Unique ID
-     */
-    function generateUniqueId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+
+    function processDynamicSection(entrySelector, fieldNames) {
+        const entries = [];
+        document.querySelectorAll(entrySelector).forEach(entryElement => {
+            const entryData = {};
+            let hasData = false; // Check if entry has any actual data
+            fieldNames.forEach(fieldName => {
+                 // Find input/textarea/select using name or data-name attribute within the entry element
+                const input = entryElement.querySelector(`[name$="].${fieldName}"]`) || entryElement.querySelector(`[data-name="${fieldName}"]`);
+                 if (input) {
+                    if (input.type === 'checkbox') {
+                        entryData[fieldName] = input.checked;
+                        // Usually checkbox alone doesn't mean the entry has data unless required
+                    } else if (input.tagName === 'TEXTAREA' || input.type === 'text' || input.type === 'url' || input.type === 'month' || input.type === 'email') {
+                         entryData[fieldName] = input.value.trim();
+                        if (entryData[fieldName]) {
+                            hasData = true; // Mark if any text field has value
+                        }
+                    }
+                    // Handle 'technologies' specifically if it's comma-separated in one input
+                     if (fieldName === 'technologies' && typeof entryData[fieldName] === 'string') {
+                        entryData[fieldName] = entryData[fieldName].split(',')
+                                                    .map(tech => tech.trim())
+                                                    .filter(tech => tech.length > 0);
+                         if (entryData[fieldName].length > 0) hasData = true;
+                    }
+                } else {
+                    // Initialize field as empty/null if not found (or default value)
+                     entryData[fieldName] = (fieldName === 'technologies') ? [] : (fieldName === 'current' ? false : '');
+                }
+
+                 // Handle null for dates if empty
+                 if ((fieldName === 'startDate' || fieldName === 'endDate') && !entryData[fieldName]) {
+                     entryData[fieldName] = null;
+                 }
+                 // If 'current' is true, ensure 'endDate' is null
+                 if (fieldName === 'endDate' && entryData['current'] === true) {
+                    entryData[fieldName] = null;
+                 }
+
+            });
+             // Only add the entry if it contains some data (modify this condition if needed)
+            if (hasData) {
+                entries.push(entryData);
+            }
+        });
+        return entries;
     }
-    
-    /**
-     * Submit resume data to the serverless function
-     * @param {Object} resumeData - Resume data
-     */
+
+
+    function generateUniqueId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 7); // Slightly longer random part
+    }
+
+    // --- submitResumeData function with CORRECTED .catch block ---
     function submitResumeData(resumeData) {
-        console.log('Submitting resume data:', resumeData);
-        
-        // Show loading state
-        showSubmissionStatus();
-        
-        // Try to call the serverless function first
+        console.log('Submitting resume data via API:', resumeData);
+
+        showSubmissionStatus(true); // Show loading
+
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const timeoutId = setTimeout(() => {
+             controller.abort();
+             console.error('API request timed out.');
+             // Show timeout specific error if needed, or let the catch handle AbortError
+             // handleSubmitResponse({ success: false, error: 'Request timed out. Please try again.' });
+        }, 25000); // 25 second timeout
 
         fetch('/api/submit-resume', {
             method: 'POST',
@@ -396,104 +324,110 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify(resumeData),
             signal: controller.signal
         })
-        .finally(() => clearTimeout(timeoutId))
+        .finally(() => clearTimeout(timeoutId)) // Always clear timeout
         .then(response => {
+            // Check if response is ok (status 200-299)
             if (!response.ok) {
-                throw new Error(`Server responded with status: ${response.status}`);
+                 // Try to get error details from body, then throw
+                 return response.text().then(text => {
+                    let errorDetail = text;
+                    try {
+                        // Attempt to parse as JSON for structured errors
+                        const errorJson = JSON.parse(text);
+                        errorDetail = errorJson.error || errorJson.message || text;
+                    } catch(e) { /* Ignore parsing error, use raw text if not JSON */ }
+                    // Throw an error to be caught by the .catch block
+                    throw new Error(`Server error: ${response.status} - ${errorDetail}`);
+                 });
             }
+            // If OK, parse the JSON body for the success response
             return response.json();
         })
         .then(data => {
-            handleSubmitResponse(data);
+             // Handle successful response from the function (data might still indicate internal success/failure)
+             // Check if the data object itself signals success
+             if (data && data.success) {
+                handleSubmitResponse(data);
+             } else {
+                 // Handle cases where the function returns 2xx but reports an error in the body
+                 throw new Error(data.error || 'API returned success status but reported an error.');
+             }
         })
-        .catch(error => {
+        .catch(error => { // *** THIS IS THE CORRECTED CATCH BLOCK ***
             console.error('Error submitting resume via API:', error);
-            
-            // API submission failed, try direct GitHub submission instead
-            console.log('Attempting direct GitHub submission as fallback...');
-            
-            // Check if the direct GitHub submission function is available
-            if (typeof window.submitResumeToGitHub === 'function') {
-                // Submit directly to GitHub
-                window.submitResumeToGitHub(resumeData)
-                    .then(result => {
-                        handleSubmitResponse(result);
-                    })
-                    .catch(githubError => {
-                        console.error('Error during direct GitHub submission:', githubError);
-                        handleSubmitResponse({
-                            success: false,
-                            error: 'Both API and direct GitHub submission failed. Please try again later.'
-                        });
-                    });
-            } else {
-                // Direct GitHub submission not available
-                handleSubmitResponse({
-                    success: false,
-                    error: 'API submission failed and direct GitHub submission is not available. Please try again later.'
-                });
-            }
-        });
+
+            // Display the error message from the fetch failure or thrown error
+            handleSubmitResponse({
+                success: false,
+                 // Use the error message caught, provide default if empty
+                error: `Submission failed: ${error.message || 'Network error or server unavailable. Please try again.'}`
+            });
+
+            // *** NO FALLBACK LOGIC HERE ***
+
+        }); // *** END OF CORRECTED CATCH BLOCK ***
     }
-    
-    /**
-     * Handle the response from the serverless function
-     * @param {Object} response - API response
-     */
+    // --- End submitResumeData ---
+
+
     function handleSubmitResponse(response) {
-        hideLoadingIndicator();
-        
+        hideLoadingIndicator(); // Hide loading indicator regardless of success/fail
+
         if (response.success) {
-            // Show success message
             successMessage.style.display = 'block';
-            
-            // Set resume and edit links
-            resumeLink.href = response.resumeUrl;
-            editLink.href = response.editUrl;
+            errorMessage.style.display = 'none';
+            // Construct absolute URLs
+            const origin = window.location.origin;
+            const viewUrl = new URL(response.resumeUrl, origin).href;
+            const editUrlWithToken = new URL(response.editUrl, origin).href;
+
+            resumeLink.href = viewUrl;
+            editLink.href = editUrlWithToken;
+            resumeLink.textContent = `View Your Resume`; // Keep text simple
+            editLink.textContent = `Save Your Edit Link!`; // Clear call to action
+            submissionStatus.style.display = 'flex'; // Ensure parent container is visible
+
+            // Optionally disable form fields or show a 'Start Over' button?
+            // resumeForm.reset(); // Maybe reset the form?
+
         } else {
-            // Show error message
             errorMessage.style.display = 'block';
-            errorText.textContent = response.error || 'There was an error processing your resume. Please try again.';
+            successMessage.style.display = 'none';
+            errorText.textContent = response.error || 'An unknown error occurred. Please try again.';
+            submissionStatus.style.display = 'flex'; // Ensure parent container is visible
         }
     }
-    
-    /**
-     * Handle preview button click
-     */
+
     function handlePreview() {
-        // This would typically open a preview modal or navigate to a preview page
-        // For this demo, we'll just log the form data
+        // Implement preview logic if needed - This is just a placeholder
         const formData = new FormData(resumeForm);
-        const resumeData = formDataToJSON(formData);
-        
+        const resumeData = formDataToStructuredJSON(formData);
         console.log('Preview resume data:', resumeData);
-        alert('Preview functionality would be implemented here. Check the console for the form data.');
+        alert('Preview functionality not fully implemented. Check console for data.');
     }
-    
-    /**
-     * Show the submission status overlay
-     */
-    function showSubmissionStatus() {
-        submissionStatus.style.display = 'flex';
-        loadingIndicator.style.display = 'block';
-        successMessage.style.display = 'none';
-        errorMessage.style.display = 'none';
+
+    function showSubmissionStatus(isLoading = false) {
+        submissionStatus.style.display = 'flex'; // Show the main status container
+        if(isLoading) {
+            loadingIndicator.style.display = 'block';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+        }
+         // Disable submit button when loading
+         if (submitBtn) submitBtn.disabled = isLoading;
     }
-    
-    /**
-     * Hide the loading indicator
-     */
+
     function hideLoadingIndicator() {
-        loadingIndicator.style.display = 'none';
+         if (loadingIndicator) loadingIndicator.style.display = 'none';
+          // Re-enable submit button when loading is done (could be success or error)
+         if (submitBtn) submitButton.disabled = false;
     }
-    
-    /**
-     * Hide the submission status overlay
-     */
+
+    // Function attached to the 'Try Again' button
     function hideSubmissionStatus() {
-        submissionStatus.style.display = 'none';
-        loadingIndicator.style.display = 'none';
-        successMessage.style.display = 'none';
-        errorMessage.style.display = 'none';
+         if (submissionStatus) submissionStatus.style.display = 'none';
+          // Re-enable submit button when user clicks retry
+         if (submitBtn) submitButton.disabled = false;
     }
-});
+
+}); // End DOMContentLoaded
