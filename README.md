@@ -1,4 +1,4 @@
-# Resume Website Generator 1
+# Resume Website Generator
 
 A comprehensive system for generating professional resume websites from form submissions. This project allows users to create and share their resumes as static websites hosted on GitHub Pages.
 
