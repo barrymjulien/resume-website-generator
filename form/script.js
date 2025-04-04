@@ -420,14 +420,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function hideLoadingIndicator() {
          if (loadingIndicator) loadingIndicator.style.display = 'none';
           // Re-enable submit button when loading is done (could be success or error)
-         if (submitBtn) submitButton.disabled = false;
+         if (submitBtn) submitBtn.disabled = false; // FIXED: was submitButton
     }
 
     // Function attached to the 'Try Again' button
     function hideSubmissionStatus() {
          if (submissionStatus) submissionStatus.style.display = 'none';
           // Re-enable submit button when user clicks retry
-         if (submitBtn) submitButton.disabled = false;
+         if (submitBtn) submitBtn.disabled = false; // FIXED: was submitButton
     }
 
 }); // End DOMContentLoaded
