@@ -1,0 +1,46 @@
+{
+  "template": "modern",
+  "fullName": "Peter Parker",
+  "email": "spiderman@horizonlabs.com",
+  "phone": "",
+  "location": "",
+  "website": "",
+  "linkedin": "",
+  "github": "",
+  "summary": "You local neighborhood spiderman",
+  "skills": [
+    "test"
+  ],
+  "education": [
+    {
+      "institution": "test institution",
+      "degree": "test degree",
+      "startDate": null,
+      "endDate": null,
+      "description": ""
+    }
+  ],
+  "experience": [
+    {
+      "company": "test company",
+      "position": "test position",
+      "startDate": null,
+      "endDate": null,
+      "current": false,
+      "description": "test"
+    }
+  ],
+  "projects": [
+    {
+      "title": "test",
+      "url": "",
+      "description": "test",
+      "technologies": []
+    }
+  ],
+  "metadata": {
+    "createdAt": "2025-04-04T03:25:01.652Z",
+    "version": "1.0.0",
+    "id": "m9281qokwm0te"
+  }
+}
