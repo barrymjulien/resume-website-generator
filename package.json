@@ -29,6 +29,7 @@
     "nunjucks": "^3.2.4"
   },
   "devDependencies": {
+    "cpx": "^1.5.0",
     "netlify-lambda": "^2.0.16",
     "serve": "^14.2.0"
   }
