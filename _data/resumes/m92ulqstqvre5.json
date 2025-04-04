@@ -1,0 +1,47 @@
+{
+  "template": "default",
+  "fullName": "Jackelyn L Julien",
+  "email": "jackiejulien@yahoo.com",
+  "phone": "8133996853",
+  "location": "Greater Tampa Bay",
+  "website": "",
+  "linkedin": "",
+  "github": "",
+  "summary": "Environmental Superstar",
+  "skills": [
+    "Dog Walking",
+    "Kung-Fu"
+  ],
+  "education": [
+    {
+      "institution": "UWF",
+      "degree": "B.S.",
+      "startDate": null,
+      "endDate": null,
+      "description": ""
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tampa Port Authority",
+      "position": "Hitwoman",
+      "startDate": null,
+      "endDate": null,
+      "current": false,
+      "description": "Swims with Dolphins"
+    }
+  ],
+  "projects": [
+    {
+      "title": "Built Time Machine",
+      "url": "",
+      "description": "Went to yesterday.",
+      "technologies": []
+    }
+  ],
+  "metadata": {
+    "createdAt": "2025-04-04T13:56:26.476Z",
+    "version": "1.0.0",
+    "id": "m92ulqstqvre5"
+  }
+}
