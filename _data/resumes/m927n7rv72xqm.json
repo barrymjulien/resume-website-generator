@@ -1,0 +1,46 @@
+{
+  "education": [
+    {
+      "institution": "fdsgs",
+      "degree": "test degree",
+      "startDate": null,
+      "endDate": null,
+      "description": ""
+    }
+  ],
+  "experience": [
+    {
+      "company": "100",
+      "position": "test position",
+      "startDate": null,
+      "endDate": null,
+      "current": false,
+      "description": "fsddfs"
+    }
+  ],
+  "projects": [
+    {
+      "title": "gfdsg",
+      "url": null,
+      "description": "gfsds",
+      "technologies": []
+    }
+  ],
+  "fullName": "Barry M Julien",
+  "email": "barrymjulien@gmail.com",
+  "phone": "8135206545",
+  "location": null,
+  "summary": "gfdhgd",
+  "website": null,
+  "linkedin": null,
+  "github": null,
+  "skills": [
+    "fsdgfd"
+  ],
+  "template": "default",
+  "metadata": {
+    "createdAt": "2025-04-04T03:13:43.963Z",
+    "version": "1.0.0",
+    "id": "m927n7rv72xqm"
+  }
+}
