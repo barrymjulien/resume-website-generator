@@ -384,24 +384,55 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show loading state
         showSubmissionStatus();
         
-        // Call the serverless function
+        // Try to call the serverless function first
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
         fetch('/api/submit-resume', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(resumeData),
+            signal: controller.signal
         })
-        .then(response => response.json())
+        .finally(() => clearTimeout(timeoutId))
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             handleSubmitResponse(data);
         })
         .catch(error => {
-            console.error('Error submitting resume:', error);
-            handleSubmitResponse({
-                success: false,
-                error: 'Failed to connect to the server. Please try again.'
-            });
+            console.error('Error submitting resume via API:', error);
+            
+            // API submission failed, try direct GitHub submission instead
+            console.log('Attempting direct GitHub submission as fallback...');
+            
+            // Check if the direct GitHub submission function is available
+            if (typeof window.submitResumeToGitHub === 'function') {
+                // Submit directly to GitHub
+                window.submitResumeToGitHub(resumeData)
+                    .then(result => {
+                        handleSubmitResponse(result);
+                    })
+                    .catch(githubError => {
+                        console.error('Error during direct GitHub submission:', githubError);
+                        handleSubmitResponse({
+                            success: false,
+                            error: 'Both API and direct GitHub submission failed. Please try again later.'
+                        });
+                    });
+            } else {
+                // Direct GitHub submission not available
+                handleSubmitResponse({
+                    success: false,
+                    error: 'API submission failed and direct GitHub submission is not available. Please try again later.'
+                });
+            }
         });
     }
     

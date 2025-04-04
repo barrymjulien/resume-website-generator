@@ -14,7 +14,7 @@ const config = {
   github: {
     owner: process.env.GITHUB_OWNER,
     repo: process.env.GITHUB_REPO,
-    branch: process.env.GITHUB_BRANCH || 'main',
+    branch: process.env.GITHUB_BRANCH || 'master',
     dataPath: '_data/resumes',
     token: process.env.GITHUB_TOKEN
   }
