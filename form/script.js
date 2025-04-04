@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
         showSubmissionStatus();
         
         // Call the serverless function
-        fetch('/.netlify/functions/submit-resume', {
+        fetch('/api/submit-resume', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
